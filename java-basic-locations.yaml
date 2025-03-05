@@ -1,0 +1,245 @@
+- category: mandatory
+  customVariables: []
+  description: TEST rule looking for a dependency with a version set as a variable (tomcat-servlet-api)
+  effort: 1000
+  labels:
+    - konveyor.io/target=cloud-readiness
+  message: This rule should trigger in the pom.xml if tomcat-servlet-api exists as a dependency
+  ruleID: custom-001
+  when:
+    java.dependency:
+      lowerbound: 0.0.0
+      name: org.apache.tomcat.tomcat-servlet-api
+
+- category: mandatory
+  customVariables: []
+  description: TEST rule looking for a dependency (spring-boot-starter-actuator)
+  effort: 1000
+  labels:
+    - konveyor.io/target=cloud-readiness
+  message: This rule should trigger in the pom.xml if spring-boot-starter-actuator exists as a dependency
+  ruleID: custom-002
+  when:
+    java.dependency:
+      lowerbound: 0.0.0
+      name: org.springframework.boot.spring-boot-starter-actuator
+
+- category: mandatory
+  customVariables: []
+  description: TEST rule looking for calls to a method (debug)
+  effort: 1000
+  labels:
+    - konveyor.io/target=cloud-readiness
+  message: |-
+    This rule should be triggered if there is a call to the debug method
+    
+    In the tackle test app, this rule should be triggered multiple times, i.e
+    src/main/java/io/konveyor/demo/ordermanagement/service/CustomerService.java
+  ruleID: custom-003
+  when:
+    java.referenced:
+      location: METHOD_CALL
+      pattern: org.jboss.logging.Logger.debug(*)
+
+- category: mandatory
+  customVariables: []
+  description: TEST rule looking for a constructor call (AnnotationConfigWebApplicationContext)
+  effort: 1000
+  labels:
+    - konveyor.io/target=cloud-readiness
+  message: |-
+    This rule should be triggered if a new instance of AnnotationConfigWebApplicationContext is created
+    Should trigger in the tackle test app in src/main/java/io/konveyor/demo/ordermanagement/OrderManagementAppInitializer.java
+  ruleID: custom-005
+  when:
+    java.referenced:
+      location: CONSTRUCTOR_CALL
+      pattern: org.springframework.web.context.support.AnnotationConfigWebApplicationContext*
+
+- category: mandatory
+  customVariables: []
+  description: TEST | METHOD_CALL to a static method (getLogger)
+  effort: 1000
+  labels:
+    - konveyor.io/target=cloud-readiness
+  message: |-
+    This rule should be triggered if there is a call to the static getLogger method
+    
+    In the tackle test app, this rule should be triggered multiple times, i.e
+    src/main/java/io/konveyor/demo/ordermanagement/service/CustomerService.java
+    
+    Currently affected by https://github.com/konveyor/analyzer-lsp/issues/769
+  ruleID: custom-004
+  when:
+    java.referenced:
+      location: METHOD_CALL
+      pattern: org.jboss.logging.Logger.getLogger(*)
+
+
+
+- category: mandatory
+  customVariables: []
+  description: TEST | METHOD_CALL that receives a non-primitive param (setJpaVendorAdapter)
+  effort: 1000
+  labels:
+    - konveyor.io/target=cloud-readiness
+  message: |-
+    This rule should be triggered if there is a call to the setJpaVendorAdapter method that receives a param of type HibernateJpaVendorAdapter
+    Should trigger in the tackle test app in src/main/java/io/konveyor/demo/ordermanagement/config/PersistenceConfig.java
+  ruleID: custom-006
+  when:
+    java.referenced:
+      location: METHOD_CALL
+      pattern: org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.setJpaVendorAdapter(org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter)
+
+- category: mandatory
+  customVariables: []
+  description: TEST | METHOD_CALL with 2 params (setProperty)
+  effort: 1000
+  labels:
+    - konveyor.io/target=cloud-readiness
+  message: |-
+    This rule should be triggered if there is a call to the setProperty method that receives 2 params
+    Should trigger in the tackle test app in src/main/java/io/konveyor/demo/ordermanagement/config/PersistenceConfig.java
+  ruleID: custom-007
+  when:
+    java.referenced:
+      location: METHOD_CALL
+      pattern: java.util.Properties.setProperty(java.lang.String, java.lang.String)
+
+- category: mandatory
+  customVariables: []
+  description: TEST | TYPE rule
+  effort: 1000
+  labels:
+    - konveyor.io/target=cloud-readiness
+  message: |-
+    This rule should be triggered if there is a "RuntimeException" type match in the code
+    Example: src/main/java/io/konveyor/demo/ordermanagement/exception/ResourceNotFoundException.java
+  ruleID: custom-008
+  when:
+    java.referenced:
+      location: TYPE
+      pattern: RuntimeException
+
+- category: mandatory
+  customVariables: []
+  description: TEST | INHERITANCE rule
+  effort: 1000
+  labels:
+    - konveyor.io/target=cloud-readiness
+  message: |-
+    This rule should be triggered if there is an inheritance match in the code
+    Example: src/main/java/io/konveyor/demo/ordermanagement/repository/CustomerRepository.java
+  ruleID: custom-009
+  when:
+    java.referenced:
+      location: INHERITANCE
+      pattern: org.springframework.data.repository.PagingAndSortingRepository
+
+- category: mandatory
+  customVariables: []
+  description: TEST | ANNOTATION
+  effort: 1000
+  labels:
+    - konveyor.io/target=cloud-readiness
+  message: |-
+    This rule should be triggered if there is an annotation match in the code
+    Example: src/main/java/io/konveyor/demo/ordermanagement/model/Customer.java
+  ruleID: custom-010
+  when:
+    java.referenced:
+      location: ANNOTATION
+      pattern: javax.persistence.SequenceGenerator
+
+
+- category: mandatory
+  customVariables: [ ]
+  description: TEST | IMPLEMENTS_TYPE
+  effort: 1000
+  labels:
+    - konveyor.io/target=cloud-readiness
+  message: |-
+    This rule should be triggered if there is an implements type match in the code
+    Example: Class implementing AnotherClass
+  ruleID: custom-011
+  when:
+    java.referenced:
+      location: IMPLEMENTS_TYPE
+      pattern: implements AnotherClass
+
+- category: mandatory
+  customVariables: []
+  description: TEST | RETURN_TYPE
+  effort: 1000
+  labels:
+    - konveyor.io/target=cloud-readiness
+  message: |-
+    This rule should be triggered if there is a return type match in the code
+    Example: src/main/java/io/konveyor/demo/ordermanagement/config/PersistenceConfig.java
+  ruleID: custom-012
+  when:
+    java.referenced:
+      location: RETURN_TYPE
+      pattern: org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean
+
+- category: mandatory
+  customVariables: []
+  description: TEST | RETURN_TYPE with generic
+  effort: 1000
+  labels:
+    - konveyor.io/target=cloud-readiness
+  message: |-
+    This rule should be triggered if there is a return type match in the code, in this case, the type Page accepts a generic
+    Example: src/main/java/io/konveyor/demo/ordermanagement/controller/CustomerController.java
+  ruleID: custom-013
+  when:
+    java.referenced:
+      location: RETURN_TYPE
+      pattern: org.springframework.data.domain.Page
+
+- category: mandatory
+  customVariables: []
+  description: TEST | IMPORT
+  effort: 1000
+  labels:
+    - konveyor.io/target=cloud-readiness
+  message: |-
+    This rule should be triggered if there is an import match in the code
+    Example: src/main/java/io/konveyor/demo/ordermanagement/repository/CustomerRepository.java
+  ruleID: custom-014
+  when:
+    java.referenced:
+      location: IMPORT
+      pattern: org.springframework.data.repository.PagingAndSortingRepository
+
+- category: mandatory
+  customVariables: []
+  description: TEST | VARIABLE_DECLARATION
+  effort: 1000
+  labels:
+    - konveyor.io/target=cloud-readiness
+  message: |-
+    This rule should be triggered if there is a variable declaration of the type specified
+    Example: src/main/java/io/konveyor/demo/ordermanagement/service/CustomerService.java
+  ruleID: custom-015
+  when:
+    java.referenced:
+      location: VARIABLE_DECLARATION
+      pattern: org.springframework.data.domain.Page
+
+- category: mandatory
+  customVariables: []
+  description: TEST | FIELD Static
+  effort: 1000
+  labels:
+    - konveyor.io/target=cloud-readiness
+  message: |-
+    This rule should be triggered if there is a field declaration of the type specified.
+    In this case, the field is declared as a static property
+    Example: src/main/java/io/konveyor/demo/ordermanagement/model/Customer.java
+  ruleID: custom-016
+  when:
+    java.referenced:
+      location: FIELD
+      pattern: java.lang.String
