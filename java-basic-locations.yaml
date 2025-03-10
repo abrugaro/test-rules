@@ -1,11 +1,11 @@
 - category: mandatory
   customVariables: []
-  description: TEST rule looking for a dependency with a version set as a variable (tomcat-servlet-api)
+  description: TEST | Basic Location | DEPENDENCY Lowerbound (tomcat-servlet-api)
   effort: 1000
   labels:
     - konveyor.io/target=cloud-readiness
   message: This rule should trigger in the pom.xml if tomcat-servlet-api exists as a dependency
-  ruleID: custom-001
+  ruleID: basic-location-001
   when:
     java.dependency:
       lowerbound: 0.0.0
@@ -13,12 +13,12 @@
 
 - category: mandatory
   customVariables: []
-  description: TEST rule looking for a dependency (spring-boot-starter-actuator)
+  description: TEST | Basic Location | DEPENDENCY Lowerbound (spring-boot-starter-actuator)
   effort: 1000
   labels:
     - konveyor.io/target=cloud-readiness
   message: This rule should trigger in the pom.xml if spring-boot-starter-actuator exists as a dependency
-  ruleID: custom-002
+  ruleID: basic-location-002
   when:
     java.dependency:
       lowerbound: 0.0.0
@@ -26,7 +26,7 @@
 
 - category: mandatory
   customVariables: []
-  description: TEST rule looking for calls to a method (debug)
+  description: TEST | Basic Location | METHOD_CALL (Logger.debug)
   effort: 1000
   labels:
     - konveyor.io/target=cloud-readiness
@@ -35,7 +35,7 @@
     
     In the tackle test app, this rule should be triggered multiple times, i.e
     src/main/java/io/konveyor/demo/ordermanagement/service/CustomerService.java
-  ruleID: custom-003
+  ruleID: basic-location-003
   when:
     java.referenced:
       location: METHOD_CALL
@@ -43,14 +43,14 @@
 
 - category: mandatory
   customVariables: []
-  description: TEST rule looking for a constructor call (AnnotationConfigWebApplicationContext)
+  description: TEST | Basic Location | CONSTRUCTOR_CALL (AnnotationConfigWebApplicationContext)
   effort: 1000
   labels:
     - konveyor.io/target=cloud-readiness
   message: |-
     This rule should be triggered if a new instance of AnnotationConfigWebApplicationContext is created
     Should trigger in the tackle test app in src/main/java/io/konveyor/demo/ordermanagement/OrderManagementAppInitializer.java
-  ruleID: custom-005
+  ruleID: basic-location-005
   when:
     java.referenced:
       location: CONSTRUCTOR_CALL
@@ -58,7 +58,7 @@
 
 - category: mandatory
   customVariables: []
-  description: TEST | METHOD_CALL to a static method (getLogger)
+  description: BUG | TEST | Basic Location | METHOD_CALL to a static method (getLogger)
   effort: 1000
   labels:
     - konveyor.io/target=cloud-readiness
@@ -69,24 +69,22 @@
     src/main/java/io/konveyor/demo/ordermanagement/service/CustomerService.java
     
     Currently affected by https://github.com/konveyor/analyzer-lsp/issues/769
-  ruleID: custom-004
+  ruleID: basic-location-004
   when:
     java.referenced:
       location: METHOD_CALL
       pattern: org.jboss.logging.Logger.getLogger(*)
 
-
-
 - category: mandatory
   customVariables: []
-  description: TEST | METHOD_CALL that receives a non-primitive param (setJpaVendorAdapter)
+  description: TEST | Basic Location | METHOD_CALL that receives a non-primitive param (setJpaVendorAdapter)
   effort: 1000
   labels:
     - konveyor.io/target=cloud-readiness
   message: |-
     This rule should be triggered if there is a call to the setJpaVendorAdapter method that receives a param of type HibernateJpaVendorAdapter
     Should trigger in the tackle test app in src/main/java/io/konveyor/demo/ordermanagement/config/PersistenceConfig.java
-  ruleID: custom-006
+  ruleID: basic-location-006
   when:
     java.referenced:
       location: METHOD_CALL
@@ -94,14 +92,16 @@
 
 - category: mandatory
   customVariables: []
-  description: TEST | METHOD_CALL with 2 params (setProperty)
+  description: TEST | BUG | Basic Location | METHOD_CALL with 2 params (setProperty | synchronized)
   effort: 1000
   labels:
     - konveyor.io/target=cloud-readiness
   message: |-
     This rule should be triggered if there is a call to the setProperty method that receives 2 params
     Should trigger in the tackle test app in src/main/java/io/konveyor/demo/ordermanagement/config/PersistenceConfig.java
-  ruleID: custom-007
+    
+    Affected by https://github.com/konveyor/analyzer-lsp/issues/781
+  ruleID: basic-location-007
   when:
     java.referenced:
       location: METHOD_CALL
@@ -109,14 +109,31 @@
 
 - category: mandatory
   customVariables: []
-  description: TEST | TYPE rule
+  description: TEST | BUG | Basic Location | METHOD_CALL with 2 params (addServlet)
+  effort: 1000
+  labels:
+    - konveyor.io/target=cloud-readiness
+  message: |-
+    This rule should be triggered if there is a call to the setProperty method that receives 2 params
+    Should trigger in the tackle test app in src/main/java/io/konveyor/demo/ordermanagement/OrderManagementAppInitializer.java
+    
+    Affected by https://github.com/konveyor/analyzer-lsp/issues/781
+  ruleID: basic-location-019
+  when:
+    java.referenced:
+      location: METHOD_CALL
+      pattern: javax.servlet.ServletContext(java.lang.String, org.springframework.web.servlet.DispatcherServlet)
+
+- category: mandatory
+  customVariables: []
+  description: TEST | Basic Location | TYPE rule
   effort: 1000
   labels:
     - konveyor.io/target=cloud-readiness
   message: |-
     This rule should be triggered if there is a "RuntimeException" type match in the code
     Example: src/main/java/io/konveyor/demo/ordermanagement/exception/ResourceNotFoundException.java
-  ruleID: custom-008
+  ruleID: basic-location-008
   when:
     java.referenced:
       location: TYPE
@@ -124,14 +141,14 @@
 
 - category: mandatory
   customVariables: []
-  description: TEST | INHERITANCE rule
+  description: TEST | Basic Location | INHERITANCE rule
   effort: 1000
   labels:
     - konveyor.io/target=cloud-readiness
   message: |-
     This rule should be triggered if there is an inheritance match in the code
     Example: src/main/java/io/konveyor/demo/ordermanagement/repository/CustomerRepository.java
-  ruleID: custom-009
+  ruleID: basic-location-009
   when:
     java.referenced:
       location: INHERITANCE
@@ -139,14 +156,14 @@
 
 - category: mandatory
   customVariables: []
-  description: TEST | ANNOTATION
+  description: TEST | Basic Location | ANNOTATION
   effort: 1000
   labels:
     - konveyor.io/target=cloud-readiness
   message: |-
     This rule should be triggered if there is an annotation match in the code
     Example: src/main/java/io/konveyor/demo/ordermanagement/model/Customer.java
-  ruleID: custom-010
+  ruleID: basic-location-010
   when:
     java.referenced:
       location: ANNOTATION
@@ -155,14 +172,14 @@
 
 - category: mandatory
   customVariables: [ ]
-  description: TEST | IMPLEMENTS_TYPE
+  description: TEST | Basic Location | IMPLEMENTS_TYPE
   effort: 1000
   labels:
     - konveyor.io/target=cloud-readiness
   message: |-
     This rule should be triggered if there is an implements type match in the code
     Example: Class implementing AnotherClass
-  ruleID: custom-011
+  ruleID: basic-location-011
   when:
     java.referenced:
       location: IMPLEMENTS_TYPE
@@ -170,14 +187,14 @@
 
 - category: mandatory
   customVariables: []
-  description: TEST | RETURN_TYPE
+  description: TEST | Basic Location | RETURN_TYPE
   effort: 1000
   labels:
     - konveyor.io/target=cloud-readiness
   message: |-
     This rule should be triggered if there is a return type match in the code
     Example: src/main/java/io/konveyor/demo/ordermanagement/config/PersistenceConfig.java
-  ruleID: custom-012
+  ruleID: basic-location-012
   when:
     java.referenced:
       location: RETURN_TYPE
@@ -185,29 +202,29 @@
 
 - category: mandatory
   customVariables: []
-  description: TEST | RETURN_TYPE with generic
+  description: TEST | Basic Location | RETURN_TYPE with generic
   effort: 1000
   labels:
     - konveyor.io/target=cloud-readiness
   message: |-
     This rule should be triggered if there is a return type match in the code, in this case, the type Page accepts a generic
     Example: src/main/java/io/konveyor/demo/ordermanagement/controller/CustomerController.java
-  ruleID: custom-013
+  ruleID: basic-location-013
   when:
     java.referenced:
       location: RETURN_TYPE
-      pattern: org.springframework.data.domain.Page
+      pattern: org.springframework.data.domain.Page*
 
 - category: mandatory
   customVariables: []
-  description: TEST | IMPORT
+  description: TEST | Basic Location | IMPORT
   effort: 1000
   labels:
     - konveyor.io/target=cloud-readiness
   message: |-
     This rule should be triggered if there is an import match in the code
     Example: src/main/java/io/konveyor/demo/ordermanagement/repository/CustomerRepository.java
-  ruleID: custom-014
+  ruleID: basic-location-014
   when:
     java.referenced:
       location: IMPORT
@@ -215,22 +232,22 @@
 
 - category: mandatory
   customVariables: []
-  description: TEST | VARIABLE_DECLARATION
+  description: TEST | Basic Location | VARIABLE_DECLARATION
   effort: 1000
   labels:
     - konveyor.io/target=cloud-readiness
   message: |-
     This rule should be triggered if there is a variable declaration of the type specified
     Example: src/main/java/io/konveyor/demo/ordermanagement/service/CustomerService.java
-  ruleID: custom-015
+  ruleID: basic-location-015
   when:
     java.referenced:
       location: VARIABLE_DECLARATION
-      pattern: org.springframework.data.domain.Page
+      pattern: org.springframework.data.domain.Page*
 
 - category: mandatory
   customVariables: []
-  description: TEST | FIELD Static
+  description: TEST | Basic Location | FIELD Static
   effort: 1000
   labels:
     - konveyor.io/target=cloud-readiness
@@ -238,8 +255,38 @@
     This rule should be triggered if there is a field declaration of the type specified.
     In this case, the field is declared as a static property
     Example: src/main/java/io/konveyor/demo/ordermanagement/model/Customer.java
-  ruleID: custom-016
+  ruleID: basic-location-016
   when:
     java.referenced:
       location: FIELD
       pattern: java.lang.String
+
+- category: mandatory
+  customVariables: []
+  description: TEST | Basic Location | METHOD 
+  effort: 1000
+  labels:
+    - konveyor.io/target=cloud-readiness
+  message: |-
+    This rule should be triggered if there is a method declaration with the specified pattern.
+    Example: src/main/java/io/konveyor/demo/ordermanagement/controller/CustomerController.java
+  ruleID: basic-location-017
+  when:
+    java.referenced:
+      location: METHOD
+      pattern: io.konveyor.demo.ordermanagement.controller.CustomerController.findAll(org.springframework.data.domain.Pageable)
+
+- category: mandatory
+  customVariables: []
+  description: TEST | Basic Location | CLASS
+  effort: 1000
+  labels:
+    - konveyor.io/target=cloud-readiness
+  message: |-
+    This rule should be triggered if there is a class declaration with the specified pattern.
+    Example: src/main/java/io/konveyor/demo/ordermanagement/controller/CustomerController.java
+  ruleID: basic-location-018
+  when:
+    java.referenced:
+      location: CLASS
+      pattern: io.konveyor.demo.ordermanagement.controller.CustomerController
