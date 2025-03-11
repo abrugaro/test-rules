@@ -1,5 +1,5 @@
 - category: mandatory
-  customVariables: []
+  customVariables: [ ]
   description: TEST | Basic Location | DEPENDENCY Lowerbound (tomcat-servlet-api)
   effort: 1000
   labels:
@@ -12,7 +12,7 @@
       name: org.apache.tomcat.tomcat-servlet-api
 
 - category: mandatory
-  customVariables: []
+  customVariables: [ ]
   description: TEST | Basic Location | DEPENDENCY Lowerbound (spring-boot-starter-actuator)
   effort: 1000
   labels:
@@ -25,7 +25,7 @@
       name: org.springframework.boot.spring-boot-starter-actuator
 
 - category: mandatory
-  customVariables: []
+  customVariables: [ ]
   description: TEST | Basic Location | METHOD_CALL (Logger.debug)
   effort: 1000
   labels:
@@ -42,7 +42,7 @@
       pattern: org.jboss.logging.Logger.debug(*)
 
 - category: mandatory
-  customVariables: []
+  customVariables: [ ]
   description: TEST | Basic Location | CONSTRUCTOR_CALL (AnnotationConfigWebApplicationContext)
   effort: 1000
   labels:
@@ -57,7 +57,7 @@
       pattern: org.springframework.web.context.support.AnnotationConfigWebApplicationContext*
 
 - category: mandatory
-  customVariables: []
+  customVariables: [ ]
   description: BUG | TEST | Basic Location | METHOD_CALL to a static method (getLogger)
   effort: 1000
   labels:
@@ -76,7 +76,7 @@
       pattern: org.jboss.logging.Logger.getLogger(*)
 
 - category: mandatory
-  customVariables: []
+  customVariables: [ ]
   description: TEST | Basic Location | METHOD_CALL that receives a non-primitive param (setJpaVendorAdapter)
   effort: 1000
   labels:
@@ -91,7 +91,7 @@
       pattern: org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.setJpaVendorAdapter(org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter)
 
 - category: mandatory
-  customVariables: []
+  customVariables: [ ]
   description: TEST | BUG | Basic Location | METHOD_CALL with 2 params (setProperty | synchronized)
   effort: 1000
   labels:
@@ -108,7 +108,7 @@
       pattern: java.util.Properties.setProperty(java.lang.String, java.lang.String)
 
 - category: mandatory
-  customVariables: []
+  customVariables: [ ]
   description: TEST | BUG | Basic Location | METHOD_CALL with 2 params (addServlet)
   effort: 1000
   labels:
@@ -125,7 +125,7 @@
       pattern: javax.servlet.ServletContext(java.lang.String, org.springframework.web.servlet.DispatcherServlet)
 
 - category: mandatory
-  customVariables: []
+  customVariables: [ ]
   description: TEST | Basic Location | TYPE rule
   effort: 1000
   labels:
@@ -140,7 +140,7 @@
       pattern: RuntimeException
 
 - category: mandatory
-  customVariables: []
+  customVariables: [ ]
   description: TEST | Basic Location | INHERITANCE rule
   effort: 1000
   labels:
@@ -155,7 +155,7 @@
       pattern: org.springframework.data.repository.PagingAndSortingRepository
 
 - category: mandatory
-  customVariables: []
+  customVariables: [ ]
   description: TEST | Basic Location | ANNOTATION
   effort: 1000
   labels:
@@ -186,7 +186,7 @@
       pattern: implements AnotherClass
 
 - category: mandatory
-  customVariables: []
+  customVariables: [ ]
   description: TEST | Basic Location | RETURN_TYPE
   effort: 1000
   labels:
@@ -201,7 +201,7 @@
       pattern: org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean
 
 - category: mandatory
-  customVariables: []
+  customVariables: [ ]
   description: TEST | Basic Location | RETURN_TYPE with generic
   effort: 1000
   labels:
@@ -216,7 +216,7 @@
       pattern: org.springframework.data.domain.Page*
 
 - category: mandatory
-  customVariables: []
+  customVariables: [ ]
   description: TEST | Basic Location | IMPORT
   effort: 1000
   labels:
@@ -231,7 +231,7 @@
       pattern: org.springframework.data.repository.PagingAndSortingRepository
 
 - category: mandatory
-  customVariables: []
+  customVariables: [ ]
   description: TEST | Basic Location | VARIABLE_DECLARATION
   effort: 1000
   labels:
@@ -246,7 +246,7 @@
       pattern: org.springframework.data.domain.Page*
 
 - category: mandatory
-  customVariables: []
+  customVariables: [ ]
   description: TEST | Basic Location | FIELD Static
   effort: 1000
   labels:
@@ -262,8 +262,8 @@
       pattern: java.lang.String
 
 - category: mandatory
-  customVariables: []
-  description: TEST | Basic Location | METHOD 
+  customVariables: [ ]
+  description: TEST | Basic Location | METHOD
   effort: 1000
   labels:
     - konveyor.io/target=cloud-readiness
@@ -277,7 +277,7 @@
       pattern: io.konveyor.demo.ordermanagement.controller.CustomerController.findAll(org.springframework.data.domain.Pageable)
 
 - category: mandatory
-  customVariables: []
+  customVariables: [ ]
   description: TEST | Basic Location | CLASS
   effort: 1000
   labels:
@@ -290,3 +290,19 @@
     java.referenced:
       location: CLASS
       pattern: io.konveyor.demo.ordermanagement.controller.CustomerController
+
+- category: optional
+  customVariables: [ ]
+  description: TEST | Basic Location | UPPERBOUND Dependency
+  effort: 1000
+  labels:
+    - konveyor.io/target=cloud-readiness
+  message: |-
+    This rule should be triggered if the version of the dependency is less than or equal to the specified upperbound
+    Example: In pom.xml <groupId>com.oracle.database.jdbc</groupId><artifactId>ojdbc11</artifactId><version>21.1.0.0</version>
+    This regex pattern will match any dependency that starts with com.oracle.database.jdbc followed by any characters (due to the .* part).
+  ruleID: basic-location-020
+  when:
+    java.dependency:
+      upperbound: 21.1.0.0
+      nameregex: com\.oracle\.database\.jdbc\.*

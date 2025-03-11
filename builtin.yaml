@@ -1,0 +1,28 @@
+- category: optional
+  customVariables: []
+  description: TEST | BUILTIN | XPATH
+  effort: 1000
+  labels:
+    - konveyor.io/target=cloud-readiness
+  message: |-
+    This rule should be triggered if the artifact is found in xpath in xml
+  ruleID: builtin-001
+  when:
+    builtin.xml:
+      namespaces: {}
+      xpath: /project/dependencies/dependency[groupId='com.oracle.database.jdbc' and artifactId='ojdbc11']
+
+- category: optional
+  customVariables: []
+  description: TEST | BUILTIN | XML | FILEPATHS
+  effort: 1000
+  labels:
+    - konveyor.io/target=cloud-readiness
+  message: |-
+    This rule should be triggered if the artifact is found in filepath in xml
+  ruleID: builtin-002
+  when:
+    builtin.xml:
+      filepaths:
+        - pom.xml
+      xpath: /project/dependencies/dependency[groupId='org.postgresql' and artifactId='postgresql']
