@@ -156,22 +156,6 @@
 
 - category: mandatory
   customVariables: [ ]
-  description: TEST | Basic Location | ANNOTATION
-  effort: 1000
-  labels:
-    - konveyor.io/target=cloud-readiness
-  message: |-
-    This rule should be triggered if there is an annotation match in the code
-    Example: src/main/java/io/konveyor/demo/ordermanagement/model/Customer.java
-  ruleID: basic-location-010
-  when:
-    java.referenced:
-      location: ANNOTATION
-      pattern: javax.persistence.SequenceGenerator
-
-
-- category: mandatory
-  customVariables: [ ]
   description: TEST | Basic Location | IMPLEMENTS_TYPE
   effort: 1000
   labels:
@@ -179,11 +163,15 @@
   message: |-
     This rule should be triggered if there is an implements type match in the code
     Example: Class implementing AnotherClass
+    
+    Should trigger in `src/main/java/io/konveyor/demo/ordermanagement/OrderManagementAppInitializer.java`
+    https://github.com/konveyor/tackle-testapp-public/blob/7e7a5086a42460d4512c344b0924fb5664a41d3f/src/main/java/io/konveyor/demo/ordermanagement/OrderManagementAppInitializer.java#L12
+
   ruleID: basic-location-011
   when:
     java.referenced:
       location: IMPLEMENTS_TYPE
-      pattern: implements AnotherClass
+      pattern: org.springframework.web.WebApplicationInitializer
 
 - category: mandatory
   customVariables: [ ]

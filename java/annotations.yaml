@@ -1,0 +1,35 @@
+- category: mandatory
+  customVariables: [ ]
+  description: TEST | ANNOTATION | Simple annotation
+  effort: 1000
+  labels:
+    - konveyor.io/target=cloud-readiness
+  message: |-
+    This rule should be triggered if there is an annotation match in the code
+    Example: src/main/java/io/konveyor/demo/ordermanagement/model/Customer.java
+  ruleID: annotations-001
+  when:
+    java.referenced:
+      location: ANNOTATION
+      pattern: javax.persistence.SequenceGenerator
+
+- category: mandatory
+  customVariables: [ ]
+  description: TEST | ANNOTATION | Annotated class with element
+  effort: 1000
+  labels:
+    - konveyor.io/target=cloud-readiness
+  message: |-
+    This rule should be triggered if there is a Customer class annotated with @Table(customers = "name")
+    Example: src/main/java/io/konveyor/demo/ordermanagement/model/Customer.java
+  ruleID: annotations-002
+  when:
+    java.referenced:
+      location: CLASS
+      pattern: io.konveyor.demo.ordermanagement.model.Customer
+      annotated:
+        pattern: javax.persistence.Table
+        elements:
+          - name: name
+            value: "customers"
+
